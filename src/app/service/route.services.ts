@@ -23,15 +23,18 @@ export class RouteService {
 
 
   get(id): Observable<Route> {
-    return this.http.get(environment.url + '/route' + id).pipe(map(
-      (data: any) =>
-        json => Route.fromJson(json)
+    return this.http.get(environment.url + '/route/' + id).pipe(map(
+      (data: any) => {
+        return Route.fromJson(data);
+      }
     ));
   }
-  getById(idUser): Observable<Route> {
+
+  getByIdUser(idUser): Observable<Route> {
     return this.http.get(environment.url + '/route/idUser' + idUser).pipe(map(
-      (data: any) =>
-        json => Route.fromJson(json)
+      (data: any) => {
+        return Route.fromJson(data);
+        }
     ));
   }
   save(route): Observable<Route> {
@@ -52,7 +55,7 @@ export class RouteService {
     ));
   }
 
-  delete(id): Observable<Route> {
+  delete(id) {
     return this.http.delete(environment.url + '/route/id').pipe(map(
       (data: any) => {
         console.log(data);

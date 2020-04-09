@@ -4,6 +4,11 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http';
 import {HttpUtil} from './util/http.util';
+import {UserService} from './service/user.service';
+import {RouterModule} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {RouteService} from './service/route.services';
+
 
 @NgModule({
   declarations: [
@@ -12,8 +17,10 @@ import {HttpUtil} from './util/http.util';
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
+    RouterModule.forRoot([])
   ],
-  providers: [HttpUtil],
+  providers: [HttpUtil, UserService, RouteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -24,8 +24,9 @@ export class PlanService {
 
   get(id): Observable<Plan> {
     return this.http.get(environment.url + '/plan' + id).pipe(map(
-      (data: any) =>
-        json => Plan.fromJson(json)
+      (data: any) => {
+        return Plan.fromJson(data);
+      }
     ));
   }
 

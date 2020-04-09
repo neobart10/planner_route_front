@@ -12,7 +12,7 @@ export class UserService {
   constructor(private http: HttpUtil) {
   }
 
-  getAll(): Observable<User> {
+  getAll(): Observable<Array<User>> {
     return this.http.get(environment.url + '/user').pipe(map(
       (data: any) =>
         data.map(
@@ -24,8 +24,9 @@ export class UserService {
 
   get(id): Observable<User> {
     return this.http.get(environment.url + '/user/' + id).pipe(map(
-      (data: any) =>
-        json => User.fromJson(json)
+      (data: any) => {
+         return User.fromJson(data);
+      }
     ));
   }
 
@@ -39,7 +40,7 @@ export class UserService {
   }
 
   update(user, id): Observable<User> {
-    return this.http.put(environment.url + '/user/id', JSON.stringify(user),
+    return this.http.put(environment.url + '/user/' + id, JSON.stringify(user),
       new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
       (data: any) => {
         if (data) { return User.fromJson(data); } else { return data; }
