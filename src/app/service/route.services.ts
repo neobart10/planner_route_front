@@ -44,7 +44,7 @@ export class RouteService {
   }
 
   update(route, id): Observable<Route> {
-    return this.http.put(environment.url + '/plan/id', JSON.stringify(route),
+    return this.http.put(environment.url + '/route/id', JSON.stringify(route),
       new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
       (data: any) => {
         if (data) { return Route.fromJson(data); } else { return data; }
@@ -53,7 +53,7 @@ export class RouteService {
   }
 
   delete(route, id): Observable<Route> {
-    return this.http.put(environment.url + '/plan/id', JSON.stringify(route),
+    return this.http.put(environment.url + '/route/id', JSON.stringify(route),
       new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
       (data: any) => {
         if (data) { return Route.fromJson(data); } else { return data; }
