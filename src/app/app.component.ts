@@ -104,7 +104,11 @@ export class AppComponent implements OnInit {
 
 
     //Jhonantan Route - update
-
+    this.routeService.update(this.route, 2).subscribe(
+      r => {
+        console.log(r);
+      }
+    );
 
     //Andres Route - Delete
     this.routeService.delete(3).subscribe(
@@ -133,6 +137,11 @@ export class AppComponent implements OnInit {
 
 
     //Jhonatan plan update
+    this.planService.update(this.plan, 2).subscribe(
+      r => {
+        console.log(r);
+      }
+    );
 
   }
 
