@@ -56,7 +56,7 @@ export class RouteService {
   }
 
   delete(id) {
-    return this.http.delete(environment.url + '/route/id').pipe(map(
+    return this.http.delete(environment.url + '/route/' +id).pipe(map(
       (data: any) => {
         console.log(data);
       }

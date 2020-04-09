@@ -13,7 +13,7 @@ export class PlanService {
   }
 
   getAll(): Observable<Array<Plan>> {
-    return this.http.get(environment.url + '/allPlan').pipe(map(
+    return this.http.get(environment.url + '/plan').pipe(map(
       (data: any) =>
         data.map(
           json => Plan.fromJson(json)
@@ -31,7 +31,7 @@ export class PlanService {
   }
 
   save(plan): Observable<Plan> {
-    return this.http.post(environment.url + '/plan/', JSON.stringify(plan),
+    return this.http.post(environment.url + '/plan', JSON.stringify(plan),
       new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
       (data: any) => {
         if (data) { return Plan.fromJson(data); } else { return data; }

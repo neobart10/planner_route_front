@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from './service/user.service';
 import {RouteService} from './service/route.services';
+import { PlanService } from './service/plan.service';
 
 @Component({
   selector: 'app-root',
@@ -46,7 +47,7 @@ export class AppComponent implements OnInit {
   };
 
 
-  constructor(private userService: UserService, private routeService: RouteService) {
+  constructor(private userService: UserService, private routeService: RouteService, private planService: PlanService) {
 
   }
 
@@ -106,12 +107,26 @@ export class AppComponent implements OnInit {
 
 
     //Andres Route - Delete
-
-
+    this.routeService.delete(3).subscribe(
+      deleteRoute =>{
+        console.log("se borra la ruta 3");
+        console.log(deleteRoute);
+      }
+    );
+    console.log('Pruebas Plan');
     //Ingrid Plan - Save
 
 
+
+
+
     //Andres plan - getAll  completar del Route los Planes
+    this.planService.getAll().subscribe(
+      allPlan =>{
+        console.log('todos los planes');
+        console.log(allPlan);
+      }
+    );
 
 
     //Aleja plan getId
