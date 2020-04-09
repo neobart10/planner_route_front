@@ -53,8 +53,7 @@ export class RouteService {
   }
 
   delete(id): Observable<Route> {
-    return this.http.delete(environment.url + '/route/id',
-      new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
+    return this.http.delete(environment.url + '/route/id').pipe(map(
       (data: any) => {
         console.log(data);
       }
