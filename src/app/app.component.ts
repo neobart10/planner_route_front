@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from './service/user.service';
-import {RouteService} from './service/route.services';
+import {RouteService} from './service/route.services'; 
+import { PlanService } from './service/plan.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -46,7 +48,7 @@ export class AppComponent implements OnInit {
   };
 
 
-  constructor(private userService: UserService, private routeService: RouteService) {
+  constructor(private userService: UserService, private routeService: RouteService, private planService: PlanService) {
 
   }
 
@@ -107,10 +109,13 @@ export class AppComponent implements OnInit {
 
     //Andres Route - Delete
 
-
     //Ingrid Plan - Save
-
-
+    this.planService.save(this.plan).subscribe(
+      p => {
+      console.log('El plan guardado es');
+      console.log(p);
+      }
+    );
     //Andres plan - getAll  completar del Route los Planes
 
 
