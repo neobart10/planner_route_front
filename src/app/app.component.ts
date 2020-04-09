@@ -101,8 +101,14 @@ export class AppComponent implements OnInit {
     );
 
     //Aleja Route - getByIdUser
+      this.routeService.getByIdUser(this.route.user.id).subscribe(
+       usuario=>{
+         console.log('la ruta del el usuario es :')
+        console.log(usuario);   
 
-
+       }
+       );
+    
     //Jhonantan Route - update
 
 
@@ -130,7 +136,15 @@ export class AppComponent implements OnInit {
 
 
     //Aleja plan getId
+    this.planService.get(1).subscribe (
+    rutaget=>{
+      console.log('plan de el usuario ');
+      console.log(rutaget);
 
+    }
+  ) ;  
+
+    
 
     //Jhonatan plan update
 
