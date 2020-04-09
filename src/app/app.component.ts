@@ -1,8 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from './service/user.service';
+<<<<<<< HEAD
 import {RouteService} from './service/route.services'; 
 import { PlanService } from './service/plan.service';
 import { Subscription } from 'rxjs';
+=======
+import {RouteService} from './service/route.services';
+import { PlanService } from './service/plan.service';
+>>>>>>> a195723b6ebd90ac43cbb25088feba2966f0bde5
 
 @Component({
   selector: 'app-root',
@@ -102,13 +107,29 @@ export class AppComponent implements OnInit {
     );
 
     //Aleja Route - getByIdUser
+      this.routeService.getByIdUser(this.route.user.id).subscribe(
+       usuario=>{
+         console.log('la ruta del el usuario es :')
+        console.log(usuario);   
 
-
+       }
+       );
+    
     //Jhonantan Route - update
-
+    this.routeService.update(this.route, 2).subscribe(
+      r => {
+        console.log(r);
+      }
+    );
 
     //Andres Route - Delete
-
+    this.routeService.delete(3).subscribe(
+      deleteRoute =>{
+        console.log("se borra la ruta 3");
+        console.log(deleteRoute);
+      }
+    );
+    
     //Ingrid Plan - Save
     this.planService.save(this.plan).subscribe(
       p => {
@@ -116,13 +137,33 @@ export class AppComponent implements OnInit {
       console.log(p);
       }
     );
+
     //Andres plan - getAll  completar del Route los Planes
+    this.planService.getAll().subscribe(
+      allPlan =>{
+        console.log('todos los planes');
+        console.log(allPlan);
+      }
+    );
 
 
     //Aleja plan getId
+    this.planService.get(1).subscribe (
+    rutaget=>{
+      console.log('plan de el usuario ');
+      console.log(rutaget);
 
+    }
+  ) ;  
+
+    
 
     //Jhonatan plan update
+    this.planService.update(this.plan, 2).subscribe(
+      r => {
+        console.log(r);
+      }
+    );
 
   }
 
