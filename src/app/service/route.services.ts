@@ -52,11 +52,11 @@ export class RouteService {
     ));
   }
 
-  delete(route, id): Observable<Route> {
-    return this.http.put(environment.url + '/route/id', JSON.stringify(route),
+  delete(id): Observable<Route> {
+    return this.http.delete(environment.url + '/route/id',
       new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
       (data: any) => {
-        if (data) { return Route.fromJson(data); } else { return data; }
+        console.log(data);
       }
     ));
   }
