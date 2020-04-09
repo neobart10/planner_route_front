@@ -32,7 +32,18 @@ export class AppComponent implements OnInit {
     targetLng: 6.7,
     hourStop: 7,
     user: this.user
-  }
+  };
+
+
+  plan = {
+    route: this.route,
+    startLat: 30.6,
+    startLng: 15.6,
+    targetLat: 17.5,
+    targetLng: 10.6,
+    stop: 1,
+    state: 1
+  };
 
 
   constructor(private userService: UserService, private routeService: RouteService) {
