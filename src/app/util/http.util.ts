@@ -10,15 +10,10 @@ export class HttpUtil {
   }
 
   callError(observable) {
-    /*.catch(
+    /*observable.catch(
       error => {
-        /*if (error.status == 401) {
-          let navigationExtras = {
-            queryParam: {url: this.router.url}
-          };
-          // this.router.navigate(['login'], navigationExtras);
-        }
-        else return error;
+        console.error(error)
+        return observable;
       }
     )*/
     return observable;

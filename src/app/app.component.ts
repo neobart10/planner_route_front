@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from './service/user.service';
-import {RouteService} from './service/route.services'; 
-import { PlanService } from './service/plan.service';
+import {RouteService} from './service/route.services';
+import {PlanService} from './service/plan.service';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
 
   user = {
     id: 1,
-    username: 'neo',
+    username: 'neo123',
     pass: '123',
     typeVehicle: 2,
     gallonsVehicle: 10,
@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
 
 
   route = {
+    id: 4,
     description: 'mi viaje a Cartagena',
     startDescription: 'prueba del start',
     targetDescription: 'prueba del target',
@@ -39,7 +40,7 @@ export class AppComponent implements OnInit {
 
   plan = {
     route: this.route,
-    startLat: 30.6,
+    startLat: 30.8,
     startLng: 15.6,
     targetLat: 17.5,
     targetLng: 10.6,
@@ -57,109 +58,106 @@ export class AppComponent implements OnInit {
     console.log('Pruebas User');
 
     this.userService.save(this.user).subscribe(
-      u => {
-        console.log(u);
-
-        this.userService.getAll().subscribe(
-          data => {
-            this.users = data;
-            console.log(this.users);
-          }
-        );
-
-      },
-      error2 => {
-        console.log(error2.error.message);
+      userSave => {
+        if (userSave) {
+          this.userService.getAll().subscribe(
+            data => {
+              this.users = data;
+              console.log(this.users);
+            }
+          );
+        }
       });
 
-    this.userService.get(1).subscribe(
-      aleja => {
-        console.log(aleja);
+    this.userService.get(11).subscribe(
+      user => {
+        if (user) {
+          console.log(user);
+        }
       }
     );
 
 
-    this.userService.update(this.user, 2).subscribe(
-      jhonatan => {
-        console.log(jhonatan);
+    this.userService.update(this.user, 11).subscribe(
+      user => {
+        if (user) {
+          console.log(user);
+        }
       }
     );
 
     console.log('Pruebas Route');
 
     this.routeService.save(this.route).subscribe(
-      r => {
-        console.log(r);
+      route => {
+        console.log(route);
       }
     );
 
-
-    this.routeService.get(3).subscribe(
-      rutaIngrid => {
-        console.log('Esta es la ruta 3');
-        console.log(rutaIngrid);
+    /* Tenia problemas cuando no existia*/
+    this.routeService.get(15).subscribe(
+      route => {
+        if (route) {
+          console.log(route);
+        }
       }
     );
 
-    //Aleja Route - getByIdUser
-      this.routeService.getByIdUser(this.route.user.id).subscribe(
-       usuario=>{
-         console.log('la ruta del el usuario es :');
-        console.log(usuario);   
-
-       }
-       );
-    
-    //Jhonantan Route - update
-    this.routeService.update(this.route, 2).subscribe(
-      r => {
-        console.log(r);
+    /*Aleja Route - getByIdUser Estaba mal el servicio*/
+    this.routeService.getByIdUser(this.route.user.id).subscribe(
+      route => {
+        if (route) {
+          console.log(route);
+        }
       }
     );
 
-    //Andres Route - Delete
-    this.routeService.delete(3).subscribe(
-      deleteRoute =>{
-        console.log("se borra la ruta 3");;
-        console.log(deleteRoute);
+    /*Jhonantan Route - update estaba mal no funcionaba el servicios estaba mal*/
+    this.routeService.update(this.route, 45).subscribe(
+      route => {
+        if (route) {
+          console.log(route);
+        }
       }
     );
-    
-    //Ingrid Plan - Save
+
+    /*Andres Route - Delete Se modifico para validar si elimino o no */
+    this.routeService.delete(2).subscribe();
+
+    /* Ingrid Plan - Save No funcionaba, lanzaba error debia agregar el id a la clase Ruta */
     this.planService.save(this.plan).subscribe(
-      p => {
-      console.log('El plan guardado es');
-      console.log(p);
+      plan => {
+        if (plan) {
+          console.log(plan);
+        }
       }
     );
 
-    //Andres plan - getAll  completar del Route los Planes
+    /*Andres plan - getAll  completar del Route los Planes */
     this.planService.getAll().subscribe(
-      allPlan =>{
-        console.log('todos los planes');
+      allPlan => {
         console.log(allPlan);
       }
     );
 
 
-    //Aleja plan get
-    this.planService.get(1).subscribe (
-    rutaget=>{
-      console.log('plan de el usuario ');
-      console.log(rutaget);
-
-    }
-  ) ;  
-
-    
-
-    //Jhonatan plan update
-    this.planService.update(this.plan, 2).subscribe(
-      r => {
-        console.log(r);
+    /* Aleja plan get no cambiaste las variables y tampoco funcionaba por que el servicio estaba mal*/
+    this.planService.get(1).subscribe(
+      plan => {
+        if (plan) {
+          console.log(plan);
+        }
       }
     );
 
+    /*Jhonatan plan update */
+    this.planService.update(this.plan, 6).subscribe(
+      plan => {
+        if (plan){
+          console.log(plan);
+        }
+      }
+    );
   }
 
 

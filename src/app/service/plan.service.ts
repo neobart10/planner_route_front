@@ -5,6 +5,7 @@ import {environment} from '../../environments/environment';
 import {Plan} from '../model/plan';
 import {Observable} from 'rxjs';
 import {HttpHandler, HttpHeaders, HttpRequest} from '@angular/common/http';
+import {Route} from '../model/route';
 
 @Injectable()
 export class PlanService {
@@ -23,9 +24,14 @@ export class PlanService {
 
 
   get(id): Observable<Plan> {
-    return this.http.get(environment.url + '/plan' + id).pipe(map(
+    return this.http.get(environment.url + '/plan/' + id).pipe(map(
       (data: any) => {
-        return Plan.fromJson(data);
+        if (data === null) {
+          console.error('204 - Plan not exist.')
+          return null;
+        } else {
+          return Plan.fromJson(data);
+        }
       }
     ));
   }
@@ -34,16 +40,26 @@ export class PlanService {
     return this.http.post(environment.url + '/plan', JSON.stringify(plan),
       new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
       (data: any) => {
-        if (data) { return Plan.fromJson(data); } else { return data; }
+        if (data.error) {
+          console.error(data.status + ' - ' + data.message);
+          return null;
+        } else {
+          return Plan.fromJson(data);
+        }
       }
     ));
   }
 
   update(plan, id): Observable<Plan> {
-    return this.http.put(environment.url + '/plan/id', JSON.stringify(plan),
+    return this.http.put(environment.url + '/plan/' + id, JSON.stringify(plan),
       new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
       (data: any) => {
-        if (data) { return Plan.fromJson(data); } else { return data; }
+        if (data === null) {
+          console.error('204 - Plan not exist.')
+          return null;
+        } else {
+          return Plan.fromJson(data);
+        }
       }
     ));
   }
