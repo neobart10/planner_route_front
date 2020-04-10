@@ -147,7 +147,7 @@ export class AppComponent implements OnInit {
     );
 
 
-    //Aleja plan getId
+    //Aleja plan get
     this.planService.get(1).subscribe (
     rutaget=>{
       console.log('plan de el usuario ');
