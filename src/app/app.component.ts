@@ -1,13 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from './service/user.service';
-<<<<<<< HEAD
 import {RouteService} from './service/route.services'; 
 import { PlanService } from './service/plan.service';
-import { Subscription } from 'rxjs';
-=======
-import {RouteService} from './service/route.services';
-import { PlanService } from './service/plan.service';
->>>>>>> a195723b6ebd90ac43cbb25088feba2966f0bde5
+
 
 @Component({
   selector: 'app-root',
