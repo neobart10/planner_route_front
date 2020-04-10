@@ -103,7 +103,7 @@ export class AppComponent implements OnInit {
     //Aleja Route - getByIdUser
       this.routeService.getByIdUser(this.route.user.id).subscribe(
        usuario=>{
-         console.log('la ruta del el usuario es :')
+         console.log('la ruta del el usuario es :');
         console.log(usuario);   
 
        }
@@ -119,7 +119,7 @@ export class AppComponent implements OnInit {
     //Andres Route - Delete
     this.routeService.delete(3).subscribe(
       deleteRoute =>{
-        console.log("se borra la ruta 3");
+        console.log("se borra la ruta 3");;
         console.log(deleteRoute);
       }
     );
