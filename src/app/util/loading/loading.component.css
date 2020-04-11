@@ -2,7 +2,7 @@ html, body {
   height: 100%;
   margin: 0;
 }
-.tharsis-load {
+.load {
   background: rgba(250, 250, 250, 0.5);
   width: 100%;
   height: 100%;
@@ -10,6 +10,6 @@ html, body {
   justify-content: center;
   align-items: center;
 }
-.tharsis-load img {
+.load img {
   width: 150px;
 }

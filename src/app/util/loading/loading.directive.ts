@@ -13,9 +13,7 @@ export class LoadingDirective implements OnInit {
     private viewContainer: ViewContainerRef,
     private componentFactoryResolver: ComponentFactoryResolver,
     private service: LoadingService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
     this.service.observable.subscribe(
@@ -34,10 +32,6 @@ export class LoadingDirective implements OnInit {
     if (!dialogComponentRef.instance.message.isShow) {
       dialogComponentRef.destroy();
     }
-    /*dialogComponentRef.instance.close.subscribe(() => {
-      console.log('2');
-      dialogComponentRef.destroy();
-    });*/
 
     return dialogComponentRef;
   }

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {LoadingMessage} from './loading.service';
-import {Observable} from 'rxjs/Rx';
+
 
 @Component({
   selector: 'app-loading',
