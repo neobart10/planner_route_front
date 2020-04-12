@@ -26,6 +26,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSelectModule} from '@angular/material/select';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'welcome', pathMatch: 'full'},
@@ -63,6 +64,7 @@ export const routes: Routes = [
     MatInputModule,
     MatFormFieldModule,
     MatSnackBarModule,
+    MatSelectModule,
     RouterModule.forRoot(routes, {useHash: true})
   ],
   providers: [HttpUtil, UserService, RouteService, PlanService],
