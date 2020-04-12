@@ -20,7 +20,6 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import {LoginComponent} from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { RouterComponent } from './router/router.component';
-import { PlansComponent } from './plans/plans.component';
 import { FilterRouteComponent } from './filter-route/filter-route.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
@@ -29,6 +28,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
 import {CookieModule} from 'ngx-cookie';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { PlanListComponent } from './plan-list/plan-list.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'welcome', pathMatch: 'full'},
@@ -37,7 +37,7 @@ export const routes: Routes = [
   {path: 'register', component: RegisterComponent, pathMatch: 'full'},
   {path: 'filter-route', component: FilterRouteComponent, pathMatch: 'full'},
   {path: 'router', component: RouterComponent, pathMatch: 'full'},
-  {path: 'plans', component: PlansComponent, pathMatch: 'full'},
+  {path: 'plan-list', component: PlanListComponent, pathMatch: 'full'},
   {path: 'user-edit', component: UserEditComponent, pathMatch: 'full'},
 ];
 
@@ -50,9 +50,9 @@ export const routes: Routes = [
     LoginComponent,
     RegisterComponent,
     RouterComponent,
-    PlansComponent,
     FilterRouteComponent,
-    UserEditComponent
+    UserEditComponent,
+    PlanListComponent
   ],
   imports: [
     BrowserModule,
