@@ -13,6 +13,7 @@ import {LoadingService} from './util/loading/loading.service';
 export class AppComponent implements OnInit {
   title = 'my-route-plan';
   loading = false;
+  registered = false;
 
   constructor(private userService: UserService, private routeService: RouteService, private planService: PlanService,
               private loadingService: LoadingService) {
@@ -26,7 +27,7 @@ export class AppComponent implements OnInit {
     setTimeout( () => {
       //this.loadingService.show(false);
       this.loading = false;
-    }, 4000 );
+    }, 1000 );
 
   }
 

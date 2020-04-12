@@ -9,7 +9,7 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span class="spacer">My Route Plan</span>
-      <mat-icon class="icon" aria-hidden="false" aria-label="Example user verified icon">map</mat-icon>
+      <mat-icon class="icon" aria-hidden="false" aria-label="Example user verified icon">place</mat-icon>
     </mat-toolbar-row>
   </mat-toolbar>
 
@@ -18,21 +18,21 @@
     <mat-sidenav #sidenav mode="over" class="filter">
 
       <div class="card_center_buttons">
-        <button mat-fab color="primary" class="button-col">
+        <button mat-fab color="primary" class="button-col" routerLink="/login" (click)="sidenav.toggle()">
           <mat-icon>person</mat-icon>
         </button>
         <span style="color:blue; font-size: 120%">My User</span>
       </div>
 
       <div class="card_center_buttons">
-        <button mat-fab color="primary" class="button-col">
+        <button mat-fab color="primary" class="button-col" routerLink="/filter-route" (click)="sidenav.toggle()">
           <mat-icon>near_me</mat-icon>
         </button>
         <span style="color:blue; font-size: 120%">My Route</span>
       </div>
 
       <div class="card_center_buttons">
-        <button mat-fab color="primary" disabled class="button-col">
+        <button mat-fab color="primary" [disabled]="registered" class="button-col" routerLink="/plans" (click)="sidenav.toggle()">
           <mat-icon>local_library</mat-icon>
         </button>
         <span style="color:blue; font-size: 120%">My Plans</span>
@@ -40,12 +40,8 @@
       <!--  <a mat-fab routerLink="." class="button-col"> Link</a>-->
     </mat-sidenav>
 
-    <mat-sidenav-content class="content" [style.background]="'url(/assets/img/background.jpg' + ')'">
-      <div>
-        <p style="color:blueviolet; font-size: 200%">Welcome to Route Plan - Go to menu </p>
-        <mat-icon  style="color:blue; font-size: 220%; height: 40px; width: 35px;">trending_flat</mat-icon>
-        <mat-icon style="color:blue; font-size: 220%; height: 40px;">menu</mat-icon>
-      </div>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
 

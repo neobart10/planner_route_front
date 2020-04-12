@@ -1,0 +1,40 @@
+<div class="load" *ngIf="loading">
+  <img src="/assets/img/loading.gif">
+</div>
+
+<mat-card class="card">
+  <mat-card-header style="flex-direction: column;">
+    <div mat-card-avatar class="header-image"></div>
+    <div style="align-self: center;">
+      <mat-card-title>Route Plan</mat-card-title>
+    </div>
+  </mat-card-header>
+
+
+  <div>
+    <mat-form-field class="full-width">
+      <mat-label>User</mat-label>
+      <input matInput placeholder="Ex. username1" [(ngModel)]="user.username">
+      <mat-error>Please enter a valid user</mat-error>
+      <mat-error>User is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+
+  <div>
+    <mat-form-field class="full-width">
+      <mat-label>Pass</mat-label>
+      <input matInput type="password" placeholder="Ex. Pass1*" [(ngModel)]="user.pass">
+      <mat-error>Please enter a valid pass</mat-error>
+      <mat-error>Pass is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+
+  <mat-card-actions>
+    <button mat-button (click)="onLogin()">START</button>
+    <button mat-button style="float: right;"  routerLink="/register">REGISTER</button>
+  </mat-card-actions>
+</mat-card>

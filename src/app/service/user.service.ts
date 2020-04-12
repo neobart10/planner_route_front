@@ -64,4 +64,19 @@ export class UserService {
       }
     ));
   }
+
+
+  login(user): Observable<User> {
+    return this.http.post(environment.url + '/user/login', JSON.stringify(user),
+      new HttpHeaders({'Content-Type' : 'application/json; charset=UTF-8;'})).pipe(map(
+      (data: any) => {
+        if (data.error) {
+          console.error(data.status + ' - ' + data.message);
+          return null;
+        } else {
+          return User.fromJson(data);
+        }
+      }
+    ));
+  }
 }

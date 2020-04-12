@@ -5,7 +5,7 @@ import {PlanService} from './service/plan.service';
 
 
 @Component({
-  selector: 'test-root',
+  selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
