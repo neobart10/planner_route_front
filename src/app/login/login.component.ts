@@ -3,6 +3,7 @@ import {UserService} from '../service/user.service';
 import {User} from '../model/user';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
+import {CookieService} from 'ngx-cookie';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +14,13 @@ export class LoginComponent implements OnInit {
 
   public user: User;
   public loading = false;
+  public usernameEmpty = false;
+  public passEmpty = false;
+  public errorLogin = false;
+  keyUser = '&I%U%$234';
 
-  constructor(private _snackBar: MatSnackBar, private userService: UserService, private router: Router) {
+  constructor(private _snackBar: MatSnackBar, private userService: UserService, private router: Router,
+              private _cookieService: CookieService) {
     this.user = new User(null, null, null, null, null, null, null);
   }
 
@@ -22,27 +28,46 @@ export class LoginComponent implements OnInit {
 
   }
 
+  isValid(){
+    this.passEmpty = false;
+    this.usernameEmpty = false;
+    this.errorLogin = false;
+
+    let result = true;
+
+    if (this.user.username === null || this.user.username.length === 0 ){
+       this.usernameEmpty = true;
+       result = false;
+    }
+
+    if (this.user.pass === null || this.user.pass.length === 0){
+      this.passEmpty = true;
+      result = false;
+    }
+
+    return result;
+  }
+
   onLogin(){
-
-    console.log('onLogin');
-    console.log(this.user.username);
-    console.log(this.user.pass);
-
-    this.loading = true;
-    this.userService.login(this.user).subscribe(
-      user => {
-        if ( user === null){
-          this.openSnackBar('User or Pass invalid.', 'Retry');
-        }else {
-          this.openSnackBar('User valid.', 'Welcome');
-          this.router.navigate(['filter-route']);
+    if (this.isValid()) {
+      this.loading = true;
+      this.userService.login(this.user).subscribe(
+        user => {
+          this.loading = false;
+          if (user === null) {
+            this.errorLogin = true;
+            this.openSnackBar('User or Pass invalid.', 'Retry');
+          } else {
+            this._cookieService.put(this.keyUser, user.id.toString());
+            this.openSnackBar('User successfully logged in, please start your route plan.', 'Welcome');
+            this.router.navigate(['filter-route']);
+          }
+          this.user.username = '';
+          this.user.pass = '';
         }
-        this.user.username = '';
-        this.user.pass = '';
-        this.loading = false;
+      );
 
-      }
-    );
+    }
   }
 
 

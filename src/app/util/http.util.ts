@@ -12,7 +12,7 @@ export class HttpUtil {
   callError(observable) {
     /*observable.catch(
       error => {
-        console.error(error)
+        console.error(error);
         return observable;
       }
     )*/

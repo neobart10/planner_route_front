@@ -27,6 +27,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
+import {CookieModule} from 'ngx-cookie';
+import { UserEditComponent } from './user-edit/user-edit.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'welcome', pathMatch: 'full'},
@@ -36,6 +38,7 @@ export const routes: Routes = [
   {path: 'filter-route', component: FilterRouteComponent, pathMatch: 'full'},
   {path: 'router', component: RouterComponent, pathMatch: 'full'},
   {path: 'plans', component: PlansComponent, pathMatch: 'full'},
+  {path: 'user-edit', component: UserEditComponent, pathMatch: 'full'},
 ];
 
 
@@ -48,7 +51,8 @@ export const routes: Routes = [
     RegisterComponent,
     RouterComponent,
     PlansComponent,
-    FilterRouteComponent
+    FilterRouteComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +69,7 @@ export const routes: Routes = [
     MatFormFieldModule,
     MatSnackBarModule,
     MatSelectModule,
+    CookieModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
   providers: [HttpUtil, UserService, RouteService, PlanService],
