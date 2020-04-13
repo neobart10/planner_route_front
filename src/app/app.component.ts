@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {UserService} from './service/user.service';
 import {RouteService} from './service/route.services';
 import {PlanService} from './service/plan.service';
@@ -6,6 +6,7 @@ import {LoadingService} from './util/loading/loading.service';
 import {CookieService} from 'ngx-cookie';
 import {isUndefined} from "util";
 import {Router} from '@angular/router';
+import {MatSidenav} from '@angular/material/sidenav';
 
 
 @Component({
@@ -20,6 +21,8 @@ export class AppComponent implements OnInit {
   keyUser = '&I%U%$234';
   userId: number;
 
+  @ViewChild('sidenav') sidenav: MatSidenav;
+
   constructor(private userService: UserService, private routeService: RouteService, private planService: PlanService,
               private loadingService: LoadingService, private _cookieService: CookieService, private router: Router) {
 
@@ -32,7 +35,7 @@ export class AppComponent implements OnInit {
     setTimeout( () => {
       //this.loadingService.show(false);
       this.loading = false;
-    }, 1000 );
+    }, 3000 );
   }
 
 
@@ -44,7 +47,7 @@ export class AppComponent implements OnInit {
   }
 
   goLogin(){
-    //sidenav.toggle();
+    this.sidenav.close();
     this.userId = this.getUserCookie(this.keyUser);
     if (this.userId === - 1){
       this.router.navigate(['login']);
