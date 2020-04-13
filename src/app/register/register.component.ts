@@ -4,6 +4,7 @@ import {UserService} from '../service/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -12,16 +13,23 @@ import {CookieService} from 'ngx-cookie';
 })
 export class RegisterComponent implements OnInit {
 
+  passFormControl = new FormControl('', [
+    Validators.required
+  ]);
+
   public user: User;
   public loading = false;
   public usernameEmpty = false;
   public passEmpty = false;
   public errorLogin = false;
+  public confirmpass= '';
+  public confirm = false;
 
   public typeVehicle = [
     {value: 1, viewValue: 'Car'},
     {value: 2, viewValue: 'Bike'}
   ];
+
 
   public gallons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
@@ -59,6 +67,7 @@ export class RegisterComponent implements OnInit {
     this.passEmpty = false;
     this.usernameEmpty = false;
     this.errorLogin = false;
+    this.confirm= false;
 
     let result = true;
 
@@ -69,6 +78,11 @@ export class RegisterComponent implements OnInit {
 
     if (this.user.pass === null || this.user.pass.length === 0){
       this.passEmpty = true;
+      result = false;
+    }
+    
+    if (this.confirmpass === null || this.confirmpass.length === 0 || this.confirmpass !== this.user.pass){
+      this.confirmpass = '';
       result = false;
     }
 
