@@ -10,7 +10,6 @@
       </div>
     </mat-card-header>
 
-
     <div>
       <mat-form-field class="full-width">
         <mat-label>User</mat-label>
@@ -25,9 +24,19 @@
     <div>
       <mat-form-field class="full-width">
         <mat-label>Pass</mat-label>
-        <input matInput type="password" placeholder="Ex. Pass1*" [(ngModel)]="user.pass">
+      <input matInput type="password" placeholder="Ex. Pass1*" [(ngModel)]="user.pass">
         <mat-error>Please enter a valid pass</mat-error>
         <mat-error>Pass is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="full-width">
+        <mat-label>ConfirmPass</mat-label>
+        <input matInput type="password" [class.invalid]="true" [(ngModel)]="confirmpass">
+        <mat-error>Please enter the same pass</mat-error>
+        <mat-error>Confirmpass is <strong>required</strong>
         </mat-error>
       </mat-form-field>
     </div>
