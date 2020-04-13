@@ -29,6 +29,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {CookieModule} from 'ngx-cookie';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { PlanListComponent } from './plan-list/plan-list.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'welcome', pathMatch: 'full'},
@@ -69,6 +70,7 @@ export const routes: Routes = [
     MatFormFieldModule,
     MatSnackBarModule,
     MatSelectModule,
+    MatExpansionModule,
     CookieModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],

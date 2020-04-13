@@ -1,1 +1,31 @@
-<p>plan-list works!</p>
+<div class="card">
+<mat-accordion class="example-headers-align card">
+  <mat-expansion-panel *ngFor="let route of routes; let i = index"  [expanded]="step === i" (opened)="setStep(i)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Description Route
+      </mat-panel-title>
+      <mat-panel-description>
+        {{route.description}}
+        <mat-icon>map</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-form-field>
+      <mat-label>From</mat-label>
+      <input matInput type="text" disabled [ngModel]="route.startDescription">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>To</mat-label>
+      <input matInput type="text" disabled [ngModel]="route.targetDescription">
+    </mat-form-field>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="goRoute()">Go Route</button>
+      <button mat-button color="primary" (click)="nextStep()">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+</mat-accordion>
+</div>

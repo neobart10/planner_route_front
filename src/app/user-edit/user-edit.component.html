@@ -1,1 +1,71 @@
-<p>user-edit works!</p>
+<div class="load" *ngIf="loading">
+  <img src="/assets/img/loading.gif">
+</div>
+
+<mat-card class="card">
+  <mat-card-header style="flex-direction: column;">
+    <div mat-card-avatar class="header-image"></div>
+    <div style="align-self: center;">
+      <mat-card-title>Route Plan</mat-card-title>
+    </div>
+  </mat-card-header>
+
+
+  <div>
+    <mat-form-field class="full-width">
+      <mat-label>User</mat-label>
+      <input matInput placeholder="Ex. username1" [(ngModel)]="user.username">
+      <mat-error>Please enter a valid user</mat-error>
+      <mat-error>User is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+
+  <div>
+    <mat-form-field class="full-width">
+      <mat-label>Pass</mat-label>
+      <input matInput type="password" placeholder="Ex. Pass1*" [(ngModel)]="user.pass">
+      <mat-error>Please enter a valid pass</mat-error>
+      <mat-error>Pass is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field class="full-width">
+      <mat-label>Type Vehicle</mat-label>
+      <mat-select [(ngModel)]="user.typeVehicle">
+        <mat-option *ngFor="let vehicle of typeVehicle" [value] = "vehicle.value">
+          {{vehicle.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field class="full-width">
+      <mat-label>Gallons Vehicle</mat-label>
+      <mat-select [(ngModel)]="user.gallonsVehicle">
+        <mat-option *ngFor="let gallon of gallons" [value] = "gallon">
+          {{gallon}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field class="full-width">
+      <mat-label>Gallons/Km</mat-label>
+      <input type="number" matInput placeholder="Ex. 7.5" [(ngModel)]="user.gallonsKm">
+      <mat-error>Please enter a valid user</mat-error>
+      <mat-error>User is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-card-actions>
+    <button mat-button (click)="onSave()">SAVE</button>
+    <button mat-button style="float: right;"  routerLink="/login">CANCEL</button>
+  </mat-card-actions>
+</mat-card>
