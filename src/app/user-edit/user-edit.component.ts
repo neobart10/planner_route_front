@@ -17,11 +17,15 @@ export class UserEditComponent implements OnInit {
   public usernameEmpty = false;
   public passEmpty = false;
   public errorLogin = false;
+  public userId : number;
+
 
   public typeVehicle = [
     {value: 1, viewValue: 'Car'},
     {value: 2, viewValue: 'Bike'}
   ];
+
+  keyUser = '&I%U%$234';
 
   public gallons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
@@ -33,22 +37,31 @@ export class UserEditComponent implements OnInit {
 
   ngOnInit(): void {
 
+<<<<<<< HEAD
 
 
+=======
+     this.userId = Number (this._cookieService.get(this.keyUser));
+
+      this.userService.get(this.userId).subscribe(  
+        user => {          
+          this.user = user;          
+        }
+      );
+>>>>>>> 1656b73d9b35ecdeb0e076413c70903824aa145a
   }
 
   onSave() {
     if (this.isValid()) {
       this.loading = true;
-      this.userService.save(this.user).subscribe(
+      this.userService.update(this.user,this.user.id).subscribe(
         user => {
           this.loading = false;
           if (user === null) {
             this.errorLogin = true;
-            this.openSnackBar('Username exist.', 'Retry');
+            this.openSnackBar('user not exist.', 'Retry');
           } else {
-            this.openSnackBar('Registered user successfully, please start your route plan.', 'Welcome');
-            this.router.navigate(['filter-route']);
+            this.openSnackBar('User Updated', 'Welcome');            
           }
           this.user.username = '';
           this.user.pass = '';
@@ -82,6 +95,13 @@ export class UserEditComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 5000,
     });
+  }
+
+
+
+  onLogOut(){
+    this._cookieService.remove(this.keyUser);
+    this.router.navigate(['login']);
   }
 
 }

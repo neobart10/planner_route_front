@@ -14,7 +14,7 @@
   <div>
     <mat-form-field class="full-width">
       <mat-label>User</mat-label>
-      <input matInput placeholder="Ex. username1" [(ngModel)]="user.username">
+      <input  matInput type="text" placeholder="Ex. Pass1*" disabled [(ngModel)]="user.username">
       <mat-error>Please enter a valid user</mat-error>
       <mat-error>User is <strong>required</strong>
       </mat-error>
@@ -66,6 +66,7 @@
 
   <mat-card-actions>
     <button mat-button (click)="onSave()">SAVE</button>
-    <button mat-button style="float: right;"  routerLink="/login">CANCEL</button>
+    <button mat-button style="float: right;"  (click)="onLogOut()">Log out</button>
+    <button mat-button style="float: right;"  routerLink="/welcome">Return</button>
   </mat-card-actions>
 </mat-card>
