@@ -5,7 +5,7 @@
 <div class="mat-app-background basic-container" *ngIf="!loading">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
-      <button mat-icon-button (click)="sidenav.toggle()">
+      <button mat-icon-button (click)="onOpenMenu()">
         <mat-icon>menu</mat-icon>
       </button>
       <span class="spacer">My Route Plan</span>
@@ -25,7 +25,7 @@
       </div>
 
       <div class="card_center_buttons">
-        <button mat-fab color="primary" class="button-col" routerLink="/filter-route" (click)="sidenav.toggle()">
+        <button mat-fab color="primary" class="button-col" routerLink="/planner" (click)="sidenav.toggle()">
           <mat-icon>near_me</mat-icon>
         </button>
         <span style="color:blue; font-size: 120%">My Route</span>

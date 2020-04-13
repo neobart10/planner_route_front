@@ -6,7 +6,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {HttpUtil} from './util/http.util';
 import {UserService} from './service/user.service';
 import {RouterModule, Routes} from '@angular/router';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouteService} from './service/route.services';
 import { PlanService } from './service/plan.service';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -19,8 +19,6 @@ import {LoadingComponent} from './util/loading/loading.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import {LoginComponent} from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { RouterComponent } from './router/router.component';
-import { FilterRouteComponent } from './filter-route/filter-route.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -30,14 +28,15 @@ import {CookieModule} from 'ngx-cookie';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { PlanListComponent } from './plan-list/plan-list.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { PlannerComponent } from './planner/planner.component';
+import {AgmCoreModule} from '@agm/core';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'welcome', pathMatch: 'full'},
   {path: 'welcome', component: WelcomeComponent, pathMatch: 'full'},
   {path: 'login', component: LoginComponent, pathMatch: 'full'},
   {path: 'register', component: RegisterComponent, pathMatch: 'full'},
-  {path: 'filter-route', component: FilterRouteComponent, pathMatch: 'full'},
-  {path: 'router', component: RouterComponent, pathMatch: 'full'},
+  {path: 'planner', component: PlannerComponent, pathMatch: 'full'},
   {path: 'plan-list', component: PlanListComponent, pathMatch: 'full'},
   {path: 'user-edit', component: UserEditComponent, pathMatch: 'full'},
 ];
@@ -50,10 +49,9 @@ export const routes: Routes = [
     WelcomeComponent,
     LoginComponent,
     RegisterComponent,
-    RouterComponent,
-    FilterRouteComponent,
     UserEditComponent,
-    PlanListComponent
+    PlanListComponent,
+    PlannerComponent
   ],
   imports: [
     BrowserModule,
@@ -71,6 +69,11 @@ export const routes: Routes = [
     MatSnackBarModule,
     MatSelectModule,
     MatExpansionModule,
+    ReactiveFormsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyC3Rqop7zUXKC1Oxy8P9znappPOmSn4ORs',
+      libraries: ['places', 'geometry']
+    }),
     CookieModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FilterRouteComponent } from './filter-route.component';
+import { PlannerComponent } from './planner.component';
 
-describe('FilterRouteComponent', () => {
-  let component: FilterRouteComponent;
-  let fixture: ComponentFixture<FilterRouteComponent>;
+describe('PlannerComponent', () => {
+  let component: PlannerComponent;
+  let fixture: ComponentFixture<PlannerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FilterRouteComponent ]
+      declarations: [ PlannerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FilterRouteComponent);
+    fixture = TestBed.createComponent(PlannerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
