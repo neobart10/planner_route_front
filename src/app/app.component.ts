@@ -31,7 +31,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     setTimeout( () => {
-      console.log('ngOnInit');
       this.userId = this.getUserCookie(this.keyUser);
       this.loading = false;
     }, 3000 );
@@ -62,6 +61,5 @@ export class AppComponent implements OnInit {
     this.sidenav.open();
     this.userId = this.getUserCookie(this.keyUser);
   }
-
 
 }

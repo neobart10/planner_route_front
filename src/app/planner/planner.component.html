@@ -1,3 +1,7 @@
+<div class="load" *ngIf="loading">
+  <img src="/assets/img/loading.gif">
+</div>
+
 <mat-card class="card">
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
@@ -11,7 +15,7 @@
              autocomplete="off"
              autocapitalize="off"
              spellcheck="off"
-             placeholder="Ex. Bogota" >
+             placeholder="Ex. Bogota">
       <mat-icon matSuffix>my_location</mat-icon>
     </mat-form-field>
   </div>
@@ -32,7 +36,7 @@
   <div class="router-edit">
     <mat-form-field class="full-width">
       <mat-label>Time per journey</mat-label>
-      <mat-select [(ngModel)]="stop" name="stop">
+      <mat-select [(ngModel)]="route.hourStop" name="stop">
         <mat-option *ngFor="let s of stops" [value]="s">
           {{s}}
         </mat-option>
@@ -42,8 +46,14 @@
   </div>
 
   <div>
-    <button mat-mini-fab color="primary" (click)="onDrawRoute()" >
+    <button mat-mini-fab color="primary" [disabled]="!start||!target" (click)="onDrawRoute()">
       <mat-icon matSuffix>near_me</mat-icon>
+    </button>
+  </div>
+
+  <div>
+    <button mat-mini-fab color="warn" style="left: 5px;" [disabled]="registered||!planned" (click)="onSave()">
+      <mat-icon matSuffix>cloud_done</mat-icon>
     </button>
   </div>
 
@@ -53,3 +63,48 @@
   <div id="map" #map class="card-map"></div>
 </mat-card>
 
+
+<mat-card class="card-plans" *ngIf="start||target">
+
+<mat-accordion *ngIf="start||target" class="example-headers-align">
+  <mat-expansion-panel *ngFor="let plan of plans; let i = index" [expanded]="step === i" (opened)="setStep(i)"
+                       hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Stop #
+      </mat-panel-title>
+      <mat-panel-description>
+        {{i}}
+        <mat-icon>pin_drop</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-form-field>
+      <mat-label>plan description</mat-label>
+      <input matInput type="text" disabled value="plan.description">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Km</mat-label>
+      <input matInput type="text" disabled value="plan.km">
+    </mat-form-field>
+
+    <mat-action-row>
+      <button mat-mini-fab color="warn" (click)="getInfo(plan)">
+        <mat-icon matSuffix>not_listed_location</mat-icon>
+      </button>
+      <button mat-mini-fab [color]="plan.state===1?'basic':'accent'"  (click)="setPlan(plan)">
+        <mat-icon matSuffix>beenhere</mat-icon>
+      </button>
+      <button mat-mini-fab color="primary" (click)="getPlace(plan, 'gas_station')">
+        <mat-icon matSuffix>local_gas_station</mat-icon>
+      </button>
+      <button mat-mini-fab color="primary" (click)="getPlace(plan, 'hotel')">
+        <mat-icon matSuffix>hotel</mat-icon>
+      </button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+</mat-accordion>
+
+</mat-card>
