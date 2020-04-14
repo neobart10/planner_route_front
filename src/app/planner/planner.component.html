@@ -2,7 +2,7 @@
   <img src="/assets/img/loading.gif">
 </div>
 
-<mat-card class="card">
+<mat-card class="card" >
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
   </mat-card-header>
@@ -77,23 +77,26 @@
         {{i}}
         <mat-icon>pin_drop</mat-icon>
       </mat-panel-description>
+      <mat-panel-description>
+        {{plan.description}}
+      </mat-panel-description>
     </mat-expansion-panel-header>
 
     <mat-form-field>
-      <mat-label>plan description</mat-label>
-      <input matInput type="text" disabled value="plan.description">
+      <mat-label>Km</mat-label>
+      <input matInput type="number" value="{{plan.km}}" disabled>
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Km</mat-label>
-      <input matInput type="text" disabled value="plan.km">
+      <mat-label>Time</mat-label>
+      <input matInput type="number" value="{{plan.time}}" disabled>
     </mat-form-field>
 
     <mat-action-row>
       <button mat-mini-fab color="warn" (click)="getInfo(plan)">
         <mat-icon matSuffix>not_listed_location</mat-icon>
       </button>
-      <button mat-mini-fab [color]="plan.state===1?'basic':'accent'"  (click)="setPlan(plan)">
+      <button mat-mini-fab [color]="plan.state===1?'basic':'accent'"  (click)="setPlanState(plan)">
         <mat-icon matSuffix>beenhere</mat-icon>
       </button>
       <button mat-mini-fab color="primary" (click)="getPlace(plan, 'gas_station')">

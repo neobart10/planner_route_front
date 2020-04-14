@@ -1,0 +1,21 @@
+<div style="position: relative;">
+<div class="load-modal" *ngIf="loading">
+  <img src="/assets/img/loading.gif">
+</div>
+
+<mat-card class="card-modal" *ngIf="!loading">
+  <mat-card-header style="flex-direction: column;">
+    <div mat-card-avatar class="header-image"></div>
+    <div style="align-self: center;">
+      <mat-card-title>Route Plan</mat-card-title>
+    </div>
+  </mat-card-header>
+</mat-card>
+
+<mat-card class="card-container-map-modal">
+  <div id="map" #map class="card-map-modal"></div>
+</mat-card>
+<div mat-dialog-actions>
+  <button mat-button color="warn" (click)="onNoClick()">Return</button>
+</div>
+</div>

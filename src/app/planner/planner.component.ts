@@ -1,9 +1,17 @@
-import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, NgZone, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MapsAPILoader} from '@agm/core';
 import {Route} from '../model/route';
 import {Plan} from '../model/plan';
 import {CookieService} from 'ngx-cookie';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import LatLng = google.maps.LatLng;
+
+export interface PlaceRequest  {
+  location: LatLng;
+  radius: number;
+  type: string;
+}
 
 @Component({
   selector: 'app-planner',
@@ -52,8 +60,8 @@ export class PlannerComponent implements OnInit {
   private keyUser = '&I%U%$234';
   private userId: number;
 
-
-  constructor(private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _cookieService: CookieService) {
+  constructor(private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private cookieService: CookieService,
+              public dialog: MatDialog) {
     this.route = new Route(null, null, null, null, null, 0, 0, 0,
       0, 0, null);
   }
@@ -74,7 +82,7 @@ export class PlannerComponent implements OnInit {
   }
 
   getUserCookie(key: string) {
-    const cookie = this._cookieService.get(key);
+    const cookie = this.cookieService.get(key);
     this.registered = false;
     if ((cookie === undefined) || (cookie) === '') {
       this.registered = true;
@@ -117,7 +125,9 @@ export class PlannerComponent implements OnInit {
           this.route.startDescription = place.name;
           this.route.startLat = place.geometry.location.lat();
           this.route.startLng = place.geometry.location.lng();
-          this.setMarker(this.route.startLat, this.route.startLng, 'from', 'yellow', true, true);
+          this.setPlan(this.route.startLat, this.route.startLng, place.name, true, 0, 0);
+          this.setMarker(this.route.startLat, this.route.startLng, place.name, 'yellow', true);
+
           this.start = true;
         });
       });
@@ -138,20 +148,21 @@ export class PlannerComponent implements OnInit {
           this.route.targetDescription = place.name;
           this.route.targetLat = place.geometry.location.lat();
           this.route.targetLng = place.geometry.location.lng();
-          this.setMarker(this.route.targetLat, this.route.targetLng, 'to', 'green', true, true);
+          this.setPlan(this.route.targetLat, this.route.targetLng, place.name, true, -1, -1);
+          this.setMarker(this.route.targetLat, this.route.targetLng, place.name, 'green', true);
           this.target = true;
         });
       });
     });
   }
 
-  setMarker(lat, lng, label, color: string, isBonuce, isLast) {
+  setMarker(lat, lng, label, color: string, isBonuce) {
     let url = 'http://maps.google.com/mapfiles/ms/icons/';
     url += color + '-dot.png';
 
     const marker = new google.maps.Marker({
       map: this.map,
-      title: 'stop # ' + this.markers.length,
+      title: label,
       draggable: false,
       animation: isBonuce ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP,
       position: {lat, lng},
@@ -159,14 +170,18 @@ export class PlannerComponent implements OnInit {
       icon: url
     });
 
-    const plan = new Plan(null, null, null, null, lat, lng, this.plans.length, 1);
+    this.markers.push(marker);
+  }
+
+
+  setPlan(lat, lng, label, isLast, km, time){
+    const plan = new Plan(null, null, label, lat, lng, km, time, this.plans.length, 1);
 
     if (isLast) {
       this.plans.push(plan);
     } else {
       this.plans.splice(this.plans.length - 1, 0, plan);
     }
-    this.markers.push(marker);
   }
 
   onDrawRoute() {
@@ -206,6 +221,8 @@ export class PlannerComponent implements OnInit {
     let sumKm = 0;
     let time = 0;
     let km = 0;
+    let stop = 1;
+    this.loading = true;
 
     for (const direction of directions) {
       sumTime += direction.duration.value;
@@ -214,19 +231,21 @@ export class PlannerComponent implements OnInit {
       km = sumKm / 1000;
 
       if (time >= this.route.hourStop) {
+        this.setPlan(direction.end_location.lat(), direction.end_location.lng(), 'stop: ' + stop + ' km: ' + km + ' time: ' + time,
+          false, sumKm, sumTime);
+        this.setMarker(direction.end_location.lat(), direction.end_location.lng(), directions.name, 'red', false);
         sumTime = 0;
         sumKm = 0;
-
-        this.setMarker(direction.end_location.lat(), direction.end_location.lng(), '', 'red', false, false);
       }
     }
+    this.loading = false;
   }
 
-  public getDistanceMatrix(startlat, startlng, targetlat, targetlng) {
+  public getDistanceMatrix(startLat, startLng, targetLat, targetLng) {
     return new google.maps.DistanceMatrixService().getDistanceMatrix(
       {
-        origins: [new google.maps.LatLng(startlat, startlng)],
-        destinations: [new google.maps.LatLng(targetlat, targetlng)],
+        origins: [new google.maps.LatLng(startLat, startLng)],
+        destinations: [new google.maps.LatLng(targetLat, targetLng)],
         travelMode: google.maps.TravelMode.DRIVING
       }, (results: any) => {
         console.log(results);
@@ -251,20 +270,12 @@ export class PlannerComponent implements OnInit {
 
   }
 
-  setPlan(plan) {
+  setPlanState(plan) {
     plan.state = plan.state === 1 ? 2 : 1;
   }
 
   getPlace(plan, type) {
-    const place = new google.maps.LatLng(plan.targetLat, plan.targetLng);
-
-    /*this.map = new google.maps.Map(this.gmap.nativeElement, {
-      center: place,
-      zoom: 15
-    });*/
-
-    this.map.setCenter(place);
-    this.map.setZoom(15);
+    const place = new google.maps.LatLng(plan.lat, plan.lng);
 
     const request = {
       location: place,
@@ -272,18 +283,89 @@ export class PlannerComponent implements OnInit {
       type,
     };
 
-    const service = new google.maps.places.PlacesService(this.map);
-    service.nearbySearch(request, (results, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (const placeType of results) {
-          this.setMarker(placeType.geometry.location.lat(), placeType.geometry.location.lng(), placeType.name, 'blue', true, false);
-        }
-        console.log(results);
-      }
-    });
+    this.openDialogPlace(request);
   }
 
   onSave() {
 
   }
+
+  openDialogPlace(request): void {
+    const dialogRef = this.dialog.open(PlannerViewPlaceComponent, {
+      data: request
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+}
+
+
+@Component({
+  selector: 'app-planner-component-view-place',
+  templateUrl: 'planner.view.place.component.html',
+  styleUrls: ['./planner.component.css']
+})
+export class PlannerViewPlaceComponent implements OnInit {
+
+  @ViewChild('map', {static: false}) gmap: ElementRef;
+  map: google.maps.Map;
+
+  public loading = false;
+  private markers = [];
+
+  constructor(
+    public dialogRef: MatDialogRef<PlannerViewPlaceComponent>,
+    @Inject(MAT_DIALOG_DATA) public request: PlaceRequest) {}
+
+
+  ngOnInit(): void {
+    this.loading = true;
+    setTimeout(() => {
+      this.loadPlace();
+      this.loading = false;
+    }, 3000);
+  }
+
+  loadPlace(){
+
+    this.map = new google.maps.Map(this.gmap.nativeElement, {
+      center: this.request.location,
+      zoom: 15
+    });
+
+    const service = new google.maps.places.PlacesService(this.map);
+    service.nearbySearch(this.request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (const placeType of results) {
+          this.setMarker(placeType.geometry.location.lat(), placeType.geometry.location.lng(), placeType.name, 'blue', true);
+        }
+      }
+    });
+  }
+
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+
+  setMarker(lat, lng, label, color: string, isBonuce) {
+    let url = 'http://maps.google.com/mapfiles/ms/icons/';
+    url += color + '-dot.png';
+
+    const marker = new google.maps.Marker({
+      map: this.map,
+      title: label,
+      draggable: false,
+      animation: isBonuce ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP,
+      position: {lat, lng},
+      label,
+      icon: url
+    });
+
+    this.markers.push(marker);
+  }
+
 }

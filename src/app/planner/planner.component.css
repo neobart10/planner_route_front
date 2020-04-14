@@ -87,3 +87,41 @@
   flex-direction: row;
   overflow: hidden;
 }
+
+
+.card-container-map-modal {
+  width: 800px;
+  height: 400px;
+  top: 10px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.card-map-modal {
+  width: 800px;
+  height: 400px;
+}
+
+
+.load-modal {
+  position: relative;
+  background: white;
+  width: 400px;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.card-modal {
+  width: 800px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}

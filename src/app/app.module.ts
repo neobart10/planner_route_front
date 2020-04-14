@@ -28,8 +28,9 @@ import {CookieModule} from 'ngx-cookie';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { PlanListComponent } from './plan-list/plan-list.component';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { PlannerComponent } from './planner/planner.component';
+import {PlannerComponent, PlannerViewPlaceComponent} from './planner/planner.component';
 import {AgmCoreModule} from '@agm/core';
+import {MatDialogModule} from '@angular/material/dialog';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'welcome', pathMatch: 'full'},
@@ -51,7 +52,8 @@ export const routes: Routes = [
     RegisterComponent,
     UserEditComponent,
     PlanListComponent,
-    PlannerComponent
+    PlannerComponent,
+    PlannerViewPlaceComponent
   ],
   imports: [
     BrowserModule,
@@ -70,6 +72,7 @@ export const routes: Routes = [
     MatSelectModule,
     MatExpansionModule,
     ReactiveFormsModule,
+    MatDialogModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyC3Rqop7zUXKC1Oxy8P9znappPOmSn4ORs',
       libraries: ['places', 'geometry']
