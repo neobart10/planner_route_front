@@ -31,6 +31,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {PlannerComponent, PlannerViewPlaceComponent} from './planner/planner.component';
 import {AgmCoreModule} from '@agm/core';
 import {MatDialogModule} from '@angular/material/dialog';
+import {ErrorStateMatcher, ShowOnDirtyErrorStateMatcher} from '@angular/material/core';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'welcome', pathMatch: 'full'},
@@ -80,7 +81,7 @@ export const routes: Routes = [
     CookieModule.forRoot(),
     RouterModule.forRoot(routes, {useHash: true})
   ],
-  providers: [HttpUtil, UserService, RouteService, PlanService],
+  providers: [HttpUtil, UserService, RouteService, PlanService, {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent],
   entryComponents: [LoadingComponent]
 })

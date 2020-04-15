@@ -14,8 +14,6 @@ export class LoginComponent implements OnInit {
 
   public user: User;
   public loading = false;
-  public usernameEmpty = false;
-  public passEmpty = false;
   public errorLogin = false;
   keyUser = '&I%U%$234';
 
@@ -28,20 +26,19 @@ export class LoginComponent implements OnInit {
 
   }
 
+  isErrorState(): boolean {
+    return true;
+  }
+
   isValid(){
-    this.passEmpty = false;
-    this.usernameEmpty = false;
-    this.errorLogin = false;
 
     let result = true;
 
     if (this.user.username === null || this.user.username.length === 0 ){
-       this.usernameEmpty = true;
        result = false;
     }
 
     if (this.user.pass === null || this.user.pass.length === 0){
-      this.passEmpty = true;
       result = false;
     }
 
@@ -50,12 +47,13 @@ export class LoginComponent implements OnInit {
 
   onLogin(){
     if (this.isValid()) {
+      this.errorLogin = false;
       this.loading = true;
       this.userService.login(this.user).subscribe(
         user => {
-          this.loading = false;
           if (user === null) {
             this.errorLogin = true;
+            this.loading = false;
             this.openSnackBar('User or Pass invalid.', 'Retry');
           } else {
             this._cookieService.put(this.keyUser, user.id.toString());

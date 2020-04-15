@@ -4,7 +4,16 @@ import {UserService} from '../service/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie';
-import { FormControl, Validators } from '@angular/forms';
+import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {ErrorStateMatcher} from '@angular/material/core';
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-register',
@@ -13,19 +22,18 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
+  matcher = new MyErrorStateMatcher();
+
   passFormControl = new FormControl('', [
     Validators.required
   ]);
 
   public user: User;
   public loading = false;
-  public usernameEmpty = false;
-  public passEmpty = false;
-  public errorLogin = false;
-  public confirmpass= '';
-  public confirm = false;
+  public errorRegister = false;
+  public confirm: string;
 
-  public typeVehicle = [
+  public typesVehicle = [
     {value: 1, viewValue: 'Car'},
     {value: 2, viewValue: 'Bike'}
   ];
@@ -36,7 +44,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(private _snackBar: MatSnackBar, private userService: UserService, private router: Router,
               private _cookieService: CookieService) {
-    this.user = new User(null, null, null, null, null, null, null);
+    this.user = new User(null, undefined, undefined, null, null, null, null);
   }
 
   ngOnInit(): void {
@@ -49,14 +57,14 @@ export class RegisterComponent implements OnInit {
         user => {
           this.loading = false;
           if (user === null) {
-            this.errorLogin = true;
+            this.errorRegister = true;
             this.openSnackBar('Username exist.', 'Retry');
           } else {
             this.openSnackBar('Registered user successfully, please start your route plan.', 'Welcome');
-            this.router.navigate(['filter-route']);
+            this.router.navigate(['planner']);
           }
-          this.user.username = '';
           this.user.pass = '';
+          this.confirm = '';
         }
       );
 
@@ -64,25 +72,19 @@ export class RegisterComponent implements OnInit {
   }
 
   isValid(){
-    this.passEmpty = false;
-    this.usernameEmpty = false;
-    this.errorLogin = false;
-    this.confirm= false;
-
+    this.errorRegister = false;
     let result = true;
 
     if (this.user.username === null || this.user.username.length === 0 ){
-      this.usernameEmpty = true;
       result = false;
     }
 
     if (this.user.pass === null || this.user.pass.length === 0){
-      this.passEmpty = true;
       result = false;
     }
-    
-    if (this.confirmpass === null || this.confirmpass.length === 0 || this.confirmpass !== this.user.pass){
-      this.confirmpass = '';
+
+    if (this.confirm === null || this.confirm.length === 0 || this.confirm !== this.user.pass){
+      this.confirm = '';
       result = false;
     }
 
