@@ -4,7 +4,15 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '../service/user.service';
 import {CookieService} from 'ngx-cookie';
 import {Router} from '@angular/router';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
@@ -12,15 +20,18 @@ import {Router} from '@angular/router';
 })
 export class UserEditComponent implements OnInit {
 
+  matcher = new MyErrorStateMatcher();
+
   public user: User;
   public loading = false;
   public usernameEmpty = false;
   public passEmpty = false;
-  public errorLogin = false;
+  public errorUserEdit = false;
   public userId: number;
   private keyUser = '&I%U%$234';
+  public confirm: string;
 
-  public typeVehicle = [
+  public typesVehicle = [
     {value: 1, viewValue: 'Car'},
     {value: 2, viewValue: 'Bike'}
   ];
@@ -52,13 +63,12 @@ export class UserEditComponent implements OnInit {
         user => {
           this.loading = false;
           if (user === null) {
-            this.errorLogin = true;
+            this.errorUserEdit = true;
             this.openSnackBar('user not exist.', 'Retry');
           } else {
             this.openSnackBar('User Updated', 'Welcome');
           }
-          this.user.username = '';
-          this.user.pass = '';
+          this.confirm = '';
         }
       );
 
@@ -68,7 +78,7 @@ export class UserEditComponent implements OnInit {
   isValid() {
     this.passEmpty = false;
     this.usernameEmpty = false;
-    this.errorLogin = false;
+    this.errorUserEdit = false;
 
     let result = true;
 
@@ -79,6 +89,10 @@ export class UserEditComponent implements OnInit {
 
     if (this.user.pass === null || this.user.pass.length === 0) {
       this.passEmpty = true;
+      result = false;
+    }
+    if (this.confirm === null || this.confirm.length === 0 || this.confirm !== this.user.pass){
+      this.confirm = '';
       result = false;
     }
 

@@ -14,10 +14,7 @@
   <div>
     <mat-form-field class="full-width">
       <mat-label>User</mat-label>
-      <input  matInput type="text" placeholder="Ex. Pass1*" disabled [(ngModel)]="user.username">
-      <mat-error>Please enter a valid user</mat-error>
-      <mat-error>User is <strong>required</strong>
-      </mat-error>
+      <input  matInput type="text" disabled [(ngModel)]="user.username">
     </mat-form-field>
   </div>
 
@@ -25,48 +22,61 @@
   <div>
     <mat-form-field class="full-width">
       <mat-label>Pass</mat-label>
-      <input matInput type="password" placeholder="Ex. Pass1*" [(ngModel)]="user.pass">
-      <mat-error>Please enter a valid pass</mat-error>
-      <mat-error>Pass is <strong>required</strong>
+      <input matInput type="password" placeholder="Ex. Pass1*" [(ngModel)]="user.pass" name="pass" #pass="ngModel" required [errorStateMatcher]="matcher">
+      <mat-error *ngIf="(pass.hasError('required'))">Pass is <strong>required</strong>
       </mat-error>
     </mat-form-field>
   </div>
 
   <div>
     <mat-form-field class="full-width">
-      <mat-label>Type Vehicle</mat-label>
-      <mat-select [(ngModel)]="user.typeVehicle">
-        <mat-option *ngFor="let vehicle of typeVehicle" [value] = "vehicle.value">
-          {{vehicle.viewValue}}
-        </mat-option>
-      </mat-select>
+      <mat-label>Confirm Pass</mat-label>
+      <input matInput type="password" [(ngModel)]="confirm" name="confirmPass" #confirmPass="ngModel" required [errorStateMatcher]="matcher">
+      <mat-hint [ngStyle]="{color: 'red'}" *ngIf="pass.value != confirmPass.value">Confirm pass</mat-hint>
+      <mat-error *ngIf="(confirmPass.hasError('required'))">Confirmpass is <strong>required</strong>
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div>
     <mat-form-field class="full-width">
-      <mat-label>Gallons Vehicle</mat-label>
-      <mat-select [(ngModel)]="user.gallonsVehicle">
-        <mat-option *ngFor="let gallon of gallons" [value] = "gallon">
-          {{gallon}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        <mat-label>Type Vehicle</mat-label>
+        <mat-select [(ngModel)]="user.typeVehicle" name="typeVehicle" #typeVehicle="ngModel" required [errorStateMatcher]="matcher">
+          <mat-option *ngFor="let vehicle of typesVehicle" [value] = "vehicle.value">
+            {{vehicle.viewValue}}
+          </mat-option>
+        </mat-select>
+      <mat-error *ngIf="typeVehicle.hasError('required')">Type Vehicle is <strong>required</strong>
+      </mat-error>
+      </mat-form-field>
+</div>
 
-  <div>
+<div>
+    <mat-form-field class="full-width">
+        <mat-label>Gallons Vehicle</mat-label>
+        <mat-select [(ngModel)]="user.gallonsVehicle" name="gallonsVehicle" #gallonsVehicle="ngModel" required [errorStateMatcher]="matcher">
+          <mat-option *ngFor="let gallon of gallons" [value] = "gallon">
+            {{gallon}}
+          </mat-option>
+        </mat-select>
+      <mat-error *ngIf="gallonsVehicle.hasError('required')">Gallons Vehicle is <strong>required</strong>
+      </mat-error>
+      </mat-form-field>
+</div>
+
+<div>
     <mat-form-field class="full-width">
       <mat-label>Gallons/Km</mat-label>
-      <input type="number" matInput placeholder="Ex. 7.5" [(ngModel)]="user.gallonsKm">
-      <mat-error>Please enter a valid user</mat-error>
-      <mat-error>User is <strong>required</strong>
+      <input type="number" matInput placeholder="Ex. 7.5" [(ngModel)]="user.gallonsKm" name="gallonsKm" #gallonsKm="ngModel"  required [errorStateMatcher]="matcher">
+      <mat-error *ngIf="(gallonsKm.hasError('required'))">Gallons/Km is <strong>required</strong>
       </mat-error>
     </mat-form-field>
   </div>
 
   <mat-card-actions>
-    <button mat-button (click)="onSave()">SAVE</button>
-    <button mat-button style="float: right;"  (click)="onLogOut()">LOG-OUT</button>
-    <button mat-button style="float: right;"  routerLink="/welcome">RETURN</button>
+    <button mat-raised-button style="float: right;" [disabled]="(pass.invalid || confirmPass.invalid
+      || typeVehicle.invalid || gallonsVehicle.invalid || gallonsKm.invalid || (pass.value != confirmPass.value))" color="primary" (click)="onSave()">SAVE</button>
+    <button mat-raised-button style="float: left;" color="warn" (click)="onLogOut()">LOG-OUT</button>
+    <button mat-raised-button style="margin-left: 20px;" routerLink="/welcome">RETURN</button>
   </mat-card-actions>
 </mat-card>

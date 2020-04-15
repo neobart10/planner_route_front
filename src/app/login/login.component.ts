@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
           } else {
             this._cookieService.put(this.keyUser, user.id.toString());
             this.openSnackBar('User successfully logged in, please start your route plan.', 'Welcome');
-            this.router.navigate(['filter-route']);
+            this.router.navigate(['planner']);
           }
           this.user.username = '';
           this.user.pass = '';
