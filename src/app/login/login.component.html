@@ -15,8 +15,8 @@
     <mat-form-field class="full-width">
       <mat-label>User</mat-label>
       <input matInput placeholder="Ex. username1" name="username" [(ngModel)]="user.username" #username="ngModel" required >
-      <mat-hint *ngIf="errorLogin">Please enter a valid user</mat-hint>
-      <mat-hint *ngIf="(username.invalid || username.pending) && !errorLogin">User is <strong>required</strong></mat-hint>
+      <mat-error *ngIf="errorLogin">Please enter a valid user</mat-error>
+      <mat-error *ngIf="(username.invalid || username.pending) && !errorLogin">User is <strong>required</strong></mat-error>
     </mat-form-field>
   </div>
 
@@ -25,8 +25,8 @@
     <mat-form-field class="full-width">
       <mat-label>Pass</mat-label>
       <input matInput type="password" placeholder="Ex. Pass1*" name="pass" [(ngModel)]="user.pass" #pass="ngModel" required>
-      <mat-hint *ngIf="errorLogin">Please enter a valid pass</mat-hint>
-      <mat-hint *ngIf="(pass.invalid || pass.pending) && !errorLogin ">Pass is <strong>required</strong></mat-hint>
+      <mat-error *ngIf="errorLogin">Please enter a valid pass</mat-error>
+      <mat-error *ngIf="(pass.invalid || pass.pending) && !errorLogin ">Pass is <strong>required</strong></mat-error>
     </mat-form-field>
   </div>
 

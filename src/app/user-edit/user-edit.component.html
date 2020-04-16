@@ -76,7 +76,7 @@
   <mat-card-actions>
     <button mat-raised-button style="float: right;" [disabled]="(pass.invalid || confirmPass.invalid
       || typeVehicle.invalid || gallonsVehicle.invalid || gallonsKm.invalid || (pass.value != confirmPass.value))" color="primary" (click)="onSave()">SAVE</button>
-    <button mat-raised-button style="float: left;" color="warn" (click)="onLogOut()">LOG-OUT</button>
-    <button mat-raised-button style="margin-left: 20px;" routerLink="/welcome">RETURN</button>
+    <button mat-raised-button style="margin-left: 20px" color="warn" (click)="onLogOut()">LOG-OUT</button>
+    <button mat-raised-button style="float: left;" routerLink="/welcome">RETURN</button>
   </mat-card-actions>
 </mat-card>
