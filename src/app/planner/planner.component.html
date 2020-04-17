@@ -11,7 +11,7 @@
   <div class="router-edit">
     <mat-form-field class="full-width">
       <mat-label>From</mat-label>
-      <input matInput type="text" class="form-control" id="from" #from [formControl]="fromControl"
+      <input matInput type="text" class="form-control" id="from" #from [formControl]="fromControl" [(ngModel)]="route.startDescription"
              autocomplete="off"
              autocapitalize="off"
              spellcheck="off"
@@ -24,7 +24,7 @@
   <div class="router-edit">
     <mat-form-field class="full-width">
       <mat-label>To</mat-label>
-      <input matInput type="text" class="form-control" id="to" #to [formControl]="toControl"
+      <input matInput type="text" class="form-control" id="to" #to [formControl]="toControl" [(ngModel)]="route.targetDescription"
              autocomplete="off"
              autocapitalize="off"
              spellcheck="off"
@@ -36,7 +36,7 @@
   <div class="router-edit">
     <mat-form-field class="full-width">
       <mat-label>Time for each stop</mat-label>
-      <mat-select [(ngModel)]="route.hourStop" name="stop">
+      <mat-select [(ngModel)]="route.hourStop" name="stop" [(ngModel)]="route.hourStop">
         <mat-option *ngFor="let s of stops" [value]="s">
           {{s}}
         </mat-option>
@@ -93,7 +93,7 @@
     </mat-form-field>
 
     <mat-action-row>
-      <button mat-mini-fab color="warn" (click)="getInfo(plan)">
+      <button mat-mini-fab color="warn" (click)="getInfo(plan, 'point_of_interest')">
         <mat-icon matSuffix>not_listed_location</mat-icon>
       </button>
       <button mat-mini-fab [color]="plan.state===1?'basic':'accent'"  (click)="setPlanState(plan)">

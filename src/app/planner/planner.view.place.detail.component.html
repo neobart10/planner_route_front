@@ -1,0 +1,45 @@
+<div class="load-modal-photos" *ngIf="loading">
+  <img src="/assets/img/loading.gif" style="width: 370px; height: 350px">
+</div>
+
+<div class="div-detail-container"  *ngIf="!loading">
+
+  <mat-card class="card-modal-photos">
+    <mat-card-header style="flex-direction: column;">
+      <div mat-card-avatar class="header-image"></div>
+      <div style="align-self: center;">
+        <mat-card-title>Route Plan</mat-card-title>
+      </div>
+    </mat-card-header>
+  </mat-card>
+
+  <!--class="card-modal-photos"-->
+
+  <div *ngFor="let detail of details" style="padding: 10px;">
+    <mat-card *ngIf="!loading" class="card-modal-photos">
+      <mat-card-header style="flex-direction: column;">
+        <div mat-card-avatar class="header-image-detail" style="background-image: url({{detail.icon}})"></div>
+        <div style="align-self: center;">
+          <mat-card-title>{{detail.name}}</mat-card-title>
+        </div>
+      </mat-card-header>
+    </mat-card>
+
+    <div *ngIf="detail.photos != null">
+      <div *ngFor="let photo of detail.photos">
+        <img [src]="photo.getUrl({maxHeight: 400, maxWidth: 400})" class="modal-img-detail">
+      </div>
+    </div>
+  </div>
+
+
+  <div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="onNoClick()">Return</button>
+  </div>
+
+</div>
+
+
+<mat-card style="width: 0px; height: 0px; display: none">
+  <div id="map" #map></div>
+</mat-card>

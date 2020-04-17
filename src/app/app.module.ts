@@ -28,7 +28,7 @@ import {CookieModule} from 'ngx-cookie';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { PlanListComponent } from './plan-list/plan-list.component';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {PlannerComponent, PlannerViewPlaceComponent} from './planner/planner.component';
+import {PlannerComponent, PlannerViewPlaceComponent, PlannerViewPlaceDetailComponent} from './planner/planner.component';
 import {AgmCoreModule} from '@agm/core';
 import {MatDialogModule} from '@angular/material/dialog';
 import {ErrorStateMatcher, ShowOnDirtyErrorStateMatcher} from '@angular/material/core';
@@ -54,7 +54,8 @@ export const routes: Routes = [
     UserEditComponent,
     PlanListComponent,
     PlannerComponent,
-    PlannerViewPlaceComponent
+    PlannerViewPlaceComponent,
+    PlannerViewPlaceDetailComponent
   ],
   imports: [
     BrowserModule,

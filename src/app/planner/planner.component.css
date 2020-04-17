@@ -125,3 +125,67 @@
   justify-content: center;
   padding: 8px;
 }
+
+
+.card-container-photos-modal {
+  width: 400px;
+  height: 400px;
+  top: 10px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.card-photos-modal {
+  width: 400px;
+  height: 400px;
+}
+
+
+.load-modal-photos {
+  position: relative;
+  background: white;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+
+.card-modal-photos {
+  width: 400px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  justify-content: center;
+}
+
+.header-image-detail {
+  align-self: center;
+  background-size: cover;
+}
+
+.div-detail-container{
+  width: 500px;
+  height: auto;
+  border: 1px solid black;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  background: white;
+}
+
+.modal-img-detail{
+  width: 400px;
+  height: 400px;
+  padding-left: 35px;
+  padding-top: 8px;
+}

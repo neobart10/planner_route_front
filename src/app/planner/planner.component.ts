@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, Input, NgZone, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MapsAPILoader} from '@agm/core';
 import {Route} from '../model/route';
@@ -6,6 +6,12 @@ import {Plan} from '../model/plan';
 import {CookieService} from 'ngx-cookie';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import LatLng = google.maps.LatLng;
+import {User} from '../model/user';
+import {UserService} from '../service/user.service';
+import {RouteService} from '../service/route.services';
+import {PlanService} from '../service/plan.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, RouterModule} from '@angular/router';
 
 export interface PlaceRequest  {
   location: LatLng;
@@ -46,8 +52,11 @@ export class PlannerComponent implements OnInit {
   public durationHr: string;
 
 
+  public planStop: 0;
+  public user: User;
   public route: Route;
   public plans = Array<Plan>();
+
   private markers = [];
 
   public start = false;
@@ -59,19 +68,27 @@ export class PlannerComponent implements OnInit {
 
   private keyUser = '&I%U%$234';
   private userId: number;
+  private routeId: number;
 
   constructor(private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private cookieService: CookieService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog, private userService: UserService, private routeService: RouteService,
+              private planService: PlanService, private snackBar: MatSnackBar,
+              private activeRoute: ActivatedRoute,
+              private router: RouterModule) {
     this.route = new Route(null, null, null, null, null, 0, 0, 0,
       0, 0, null);
   }
 
   ngOnInit(): void {
+
+    this.routeId = this.activeRoute.snapshot.queryParamMap.get('id') === null ? -1 : +this.activeRoute.snapshot.queryParamMap.get('id');
+
     this.loading = true;
     setTimeout(() => {
       this.userId = this.getUserCookie(this.keyUser);
-      /*  get del user y asignarlo a route */
-      /*this.route.user =*/
+      if (this.routeId !== -1){
+        this.getRoute();
+      }
       this.loading = false;
     }, 3000);
 
@@ -79,6 +96,39 @@ export class PlannerComponent implements OnInit {
     this.toControl = new FormControl();
     this.setCurrentPosition();
     this.onLoadAutoComplete();
+  }
+
+  getRoute() {
+    this.routeService.get(this.routeId).subscribe(
+      route => {
+        if (route !== null){
+          this.route = route;
+          this.plans = this.route.plans;
+          this.recreateMarkers();
+          this.start = true;
+          this.target = true;
+        } else {
+          this.openSnackBar('Route not exist.', 'Error');
+        }
+      }
+    );
+  }
+
+  recreateMarkers(){
+    for (const plan of this.plans) {
+      let color = 'red';
+      if (plan.stop === 0){
+        color = 'yellow';
+      }else {
+        if (plan.stop === -1) {
+          color = 'green';
+        } else {
+          color = plan.state === 1 ? 'red' : 'blue';
+        }
+      }
+
+      this.setMarker(plan.lat, plan.lng, '', color, plan.stop === -1 || plan.stop === 0);
+    }
   }
 
   getUserCookie(key: string) {
@@ -219,8 +269,8 @@ export class PlannerComponent implements OnInit {
 
     let sumTime = 0;
     let sumKm = 0;
-    let time = 0;
-    let km = 0;
+    let time;
+    let km;
     let stop = 1;
     this.loading = true;
 
@@ -231,7 +281,7 @@ export class PlannerComponent implements OnInit {
       km = sumKm / 1000;
 
       if (time >= this.route.hourStop) {
-        this.setPlan(direction.end_location.lat(), direction.end_location.lng(), 'stop: ' + stop + ' km: ' + km + ' time: ' + time,
+        this.setPlan(direction.end_location.lat(), direction.end_location.lng(), 'stop: ' + (stop++) + ' km: ' + km + ' time: ' + time,
           false, sumKm, sumTime);
         this.setMarker(direction.end_location.lat(), direction.end_location.lng(), directions.name, 'red', false);
         sumTime = 0;
@@ -248,7 +298,6 @@ export class PlannerComponent implements OnInit {
         destinations: [new google.maps.LatLng(targetLat, targetLng)],
         travelMode: google.maps.TravelMode.DRIVING
       }, (results: any) => {
-        console.log(results);
         this.distanceKm = results.rows[0].elements[0].distance.text;
         this.durationHr = results.rows[0].elements[0].duration.text;
       });
@@ -266,12 +315,33 @@ export class PlannerComponent implements OnInit {
     this.step--;
   }
 
-  getInfo(plan) {
+  getInfo(plan, type) {
+
+    const place = new google.maps.LatLng(plan.lat, plan.lng);
+
+    const request = {
+      location: place,
+      radius: 1000,
+      type,
+    };
+
+
+    this.openDialogPlaceDetail(request);
 
   }
 
   setPlanState(plan) {
     plan.state = plan.state === 1 ? 2 : 1;
+    let find = false;
+    for (let marker of this.markers) {
+      if(!find) {
+        if (marker.position.lat() === plan.lat && marker.position.lng() === plan.lng) {
+          marker.setMap(null);
+          this.setMarker(marker.position.lat(), marker.position.lng(), marker.label, (plan.stable === 1 ? 'red' : 'blue'), false);
+          find = true;
+        }
+      }
+    }
   }
 
   getPlace(plan, type) {
@@ -288,6 +358,44 @@ export class PlannerComponent implements OnInit {
 
   onSave() {
 
+    /* valid user login */
+    if (this.userId !== -1){
+      /* get user by userId */
+      this.userService.get(this.userId).subscribe(
+        user => {
+          if (user !== null){
+            this.user = user;
+            /* assign user to toute and save route */
+            this.route.user = this.user;
+            this.routeService.save(this.route).subscribe(
+              route => {
+                if (route !== null){
+                  this.route = route;
+                  /* assign route to plans and save plans */
+                  for (let p of this.plans) {
+                    p.route = this.route;
+                    this.planService.save(p).subscribe(
+                      plan => {
+                        if (plan !== null){
+                          p = plan;
+                          this.openSnackBar('Save Plan', 'Save');
+                        } else {
+                          this.openSnackBar('Error to save plan', 'ERROR');
+                        }
+                      }
+                    );
+                  }
+                } else {
+                  this.openSnackBar('Error to save route.', 'ERROR');
+                }
+              }
+            );
+          } else {
+            this.openSnackBar('User no login.', 'Error');
+          }
+        }
+      );
+    }
   }
 
   openDialogPlace(request): void {
@@ -299,6 +407,23 @@ export class PlannerComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
+
+  openDialogPlaceDetail(request): void {
+    const dialogRef = this.dialog.open(PlannerViewPlaceDetailComponent, {
+      data: request
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+    });
+  }
+
 }
 
 
@@ -366,6 +491,64 @@ export class PlannerViewPlaceComponent implements OnInit {
     });
 
     this.markers.push(marker);
+  }
+
+}
+
+@Component({
+  selector: 'app-planner-component-view-place-detail',
+  templateUrl: 'planner.view.place.detail.component.html',
+  styleUrls: ['./planner.component.css']
+})
+export class PlannerViewPlaceDetailComponent implements OnInit {
+
+  @ViewChild('map', {static: false}) gmap: ElementRef;
+  map: google.maps.Map;
+
+  public loading = true;
+  public details = [];
+
+  constructor(
+    public dialogRef: MatDialogRef<PlannerViewPlaceDetailComponent>,
+    @Inject(MAT_DIALOG_DATA) public request: PlaceRequest) {}
+
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.loadPlaceDetail();
+    }, 2000);
+  }
+
+  loadPlaceDetail(){
+
+    this.map = new google.maps.Map(this.gmap.nativeElement, {
+      center: this.request.location,
+      zoom: 15
+    });
+
+    const service = new google.maps.places.PlacesService(this.map);
+
+    service.nearbySearch(this.request, (results, status) => {
+      this.loading = false;
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (const placeNearby of results) {
+          this.loading = true;
+          service.getDetails({ placeId: placeNearby.place_id }, (resultDetail, statusDetail) => {
+            this.loading = false;
+            if (resultDetail !== null) {
+              this.details.push(resultDetail);
+              this.loading = true;
+              setTimeout(() => {
+                this.loading = false;
+              }, 200);
+            }
+          });
+        }
+      }
+    });
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

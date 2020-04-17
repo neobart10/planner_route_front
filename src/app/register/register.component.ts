@@ -60,8 +60,8 @@ export class RegisterComponent implements OnInit {
             this.errorRegister = true;
             this.openSnackBar('Username exist.', 'Retry');
           } else {
-            this.openSnackBar('Registered user successfully, please start your route plan.', 'Welcome');
-            this.router.navigate(['planner']);
+            this.openSnackBar('Registered user successfully, please login.', 'Welcome');
+            this.router.navigate(['login']);
           }
           this.user.pass = '';
           this.confirm = '';

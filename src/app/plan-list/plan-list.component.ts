@@ -17,16 +17,15 @@ export class PlanListComponent implements OnInit {
   private keyUser = '&I%U%$234';
 
   constructor(private routeService: RouteService, private router: Router,
-              private _cookieService: CookieService) { }
+              private cookieService: CookieService) { }
 
   ngOnInit(): void {
 
-    this.userId = Number(this._cookieService.get(this.keyUser));
+    this.userId = Number(this.cookieService.get(this.keyUser));
 
     this.routeService.getByIdUser(this.userId).subscribe(
       routes => {
         this.routes = routes;
-        console.log(this.routes);
       }
     );
 
@@ -44,8 +43,8 @@ export class PlanListComponent implements OnInit {
     this.step--;
   }
 
-  goRoute(){
-    this.router.navigate(['router']);
+  goRoute(id){
+    this.router.navigate(['planner'], { queryParams : { id } } );
   }
 
 }
