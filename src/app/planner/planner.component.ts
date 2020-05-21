@@ -86,6 +86,11 @@ export class PlannerComponent implements OnInit {
     this.loading = true;
     setTimeout(() => {
       this.userId = this.getUserCookie(this.keyUser);
+      this.userService.get(this.userId).subscribe(
+        data=>{
+          this.user = data;
+        }
+      );
       if (this.routeId !== -1){
         this.getRoute();
       }
@@ -272,6 +277,8 @@ export class PlannerComponent implements OnInit {
     let time;
     let km;
     let stop = 1;
+    let totalkm = 0;
+    let totaltime = 0;
     this.loading = true;
 
     for (const direction of directions) {
@@ -282,7 +289,7 @@ export class PlannerComponent implements OnInit {
 
       if (time >= this.route.hourStop) {
         this.setPlan(direction.end_location.lat(), direction.end_location.lng(), 'stop: ' + (stop++) + ' km: ' + km + ' time: ' + time,
-          false, sumKm, sumTime);
+          false, totalkm+=sumKm, totaltime+=time);//sumKm*this.user.gallonsKm
         this.setMarker(direction.end_location.lat(), direction.end_location.lng(), directions.name, 'red', false);
         sumTime = 0;
         sumKm = 0;
